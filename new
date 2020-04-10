@@ -1,0 +1,32 @@
+# script to generate new directory
+# arguments 1- note name 2- template type (e.g. tex)
+
+if [ $2 = "tex" ]; then
+  EDITABLE="note.tex"
+  BUILDCMD="latexmk"
+  READABLE="note.pdf"
+  TEMPLATE="template.tex"
+else
+  echo "Error!"
+  exit 1
+fi
+
+DIR="notes/$1"
+METADATAPATH="${DIR}/metadata"
+EDITABLEPATH="${DIR}/editable"
+
+mkdir $DIR
+sed "s/--TITLE--/${1}/g" ".templates/${TEMPLATE}" > "${DIR}/${EDITABLE}"
+touch $METADATAPATH
+cat >> $METADATAPATH <<EOF
+# tags
+
+# links
+
+# editable
+${EDITABLE}
+# build-cmd
+${BUILDCMD}
+# readable
+${READABLE}
+EOF

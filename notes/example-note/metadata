@@ -1,0 +1,13 @@
+# tags
+examples
+boring
+
+# links
+other-example
+
+# editable
+note.tex
+# build-cmd
+latexmk
+# readable
+note.pdf
