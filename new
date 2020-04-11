@@ -3,7 +3,7 @@
 
 if [ $2 = "tex" ]; then
   EDITABLE="note.tex"
-  BUILDCMD="latexmk"
+  BUILDCMD="latexmk -pdf"
   READABLE="note.pdf"
   TEMPLATE="template.tex"
 else
