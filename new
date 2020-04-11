@@ -16,7 +16,7 @@ METADATAPATH="${DIR}/metadata"
 EDITABLEPATH="${DIR}/editable"
 
 mkdir $DIR
-sed "s/--TITLE--/${1}/g" ".templates/${TEMPLATE}" > "${DIR}/${EDITABLE}"
+sed "s/--TITLE--/${1}/g" "templates/${TEMPLATE}" > "${DIR}/${EDITABLE}"
 touch $METADATAPATH
 cat >> $METADATAPATH <<EOF
 # tags

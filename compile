@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+
+# script to build links and lists of tags based on metadata
+import os
+
+NOTES_DIR = './notes'
+SAVE_DIR = './compiled'
+
+class Metadata():
+    fields = ['tags', 'links', 'editable',
+              'build-cmd', 'readable']
+
+    def __init__(self, name):
+        self.name = name
+        self._process()
+
+    @property
+    def path(self):
+        path = os.path.join(
+            NOTES_DIR, self.name, 'metadata')
+        assert os.path.isfile(path),\
+            f"Missing metadata for {self.name}."
+        return path
+
+    @property
+    def raw(self):
+        return [line.strip() for line in
+                open(self.path, 'r').readlines()]
+
+    def _process(self):
+        self.contents = {f: [] for f in self.fields}
+
+        for line in self.raw:
+
+            if line == '':
+                continue
+            elif line[0] == '#':
+                new_field = line[2:]
+                assert new_field in self.fields
+                current_field = new_field
+            else:
+                self.contents[current_field].append(line)
+
+        single_item_fields = [
+            'editable', 'build-cmd', 'readable']
+        for f in single_item_fields:
+            self.contents[f] = self.contents[f][0]
+
+    @property
+    def tags(self):
+        return self.contents['tags']
+
+    @property
+    def links(self):
+        return self.contents['links']
+
+node_names = os.listdir(NOTES_DIR)
+links = {}
+topics = {}   # dictionary of topics mapping to notes
+for name in node_names:
+
+    metadata = Metadata(name)
+
+    # add topics
+    for tag in metadata.tags:
+        if tag not in topics:
+            topics[tag] = []
+        topics[tag].append(name)
+
+    # add links
+    links[name] = metadata.links
+
+# save stuff
+# nodes, topics, in_topics, links
+
+def format_list(l):
+    return '\n'.join(l)
+
+def format_dict_of_lists(d):
+    # format each value
+    x = {k: ','.join(l) for k, l in d.items()}
+    # format each (key, value) pair
+    x = [f'{k};{v}' for k, v in x.items()]
+    return '\n'.join(x)
+
+def save_item(item, format_func, fname):
+    open(os.path.join(SAVE_DIR, fname), 'w').write(
+        format_func(item)
+    )
+
+save_item(node_names, format_list, 'nodes')
+save_item(list(topics.keys()), format_list, 'topics')
+save_item(topics, format_dict_of_lists, 'in-topics')
+save_item(links, format_dict_of_lists, 'links')
