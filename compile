@@ -96,4 +96,4 @@ save_item(topics, format_dict_of_lists, 'in-topics')
 save_item(links, format_dict_of_lists, 'links')
 
 # process files for autocompletion
-os.system(f"etags --language=none --output='{os.environ['HOME']}/.emacs.d/TAGS' --regex=/'^\S*'/ compiled/nodes compiled/topics")
+os.system(f"etags --language=none --output='{os.environ['HOME']}/.emacs.d/zettel-TAGS' --regex=/'^\S*'/ compiled/nodes compiled/topics")
