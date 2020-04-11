@@ -1,5 +1,4 @@
 *.el
 
 notes/*
-compiled/*
-!compiled/README.md
+compiled/

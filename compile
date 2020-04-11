@@ -88,7 +88,12 @@ def save_item(item, format_func, fname):
         format_func(item)
     )
 
+if not os.path.isdir(SAVE_DIR):
+    os.mkdir(SAVE_DIR)
 save_item(node_names, format_list, 'nodes')
 save_item(list(topics.keys()), format_list, 'topics')
 save_item(topics, format_dict_of_lists, 'in-topics')
 save_item(links, format_dict_of_lists, 'links')
+
+# process files for autocompletion
+os.system(f"etags --language=none --output='{os.environ['HOME']}/.emacs.d/TAGS' --regex=/'^\S*'/ compiled/nodes compiled/topics")
